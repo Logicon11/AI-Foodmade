@@ -1,0 +1,385 @@
+<html><head><base href="https://www.littlechef.com/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Chef's Magical Kitchen Adventure</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Luckiest+Guy&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Bubblegum Sans', cursive;
+            background: #ECECEC;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        header {
+            background-color: transparent;
+            padding: 20px 0;
+            position: relative;
+            overflow: hidden;
+            height: 1200px; /* Increased from previous value */
+        }
+
+        .spline-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100vw); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        h2 {
+            font-family: 'Luckiest Guy', cursive;
+            color: #FF6347;
+            font-size: 2.5em;
+            margin: 20px 0;
+        }
+
+        main {
+            padding: 40px 0;
+        }
+
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .recipe-card {
+            background-color: #FFFFFF;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-15px) rotate(3deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: all 0.5s;
+        }
+
+        .recipe-card:hover .recipe-image {
+            transform: scale(1.1);
+        }
+
+        .recipe-content {
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .recipe-title {
+            font-size: 1.8em;
+            margin: 0 0 10px 0;
+            color: #FF6347;
+        }
+
+        .recipe-desc {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .health-info {
+            background: linear-gradient(135deg, #E6FFF5, #F0F8FF);
+            border-radius: 25px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 8px 16px rgba(0,128,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .health-info h3 {
+            color: #008000;
+            margin-top: 0;
+            font-size: 2em;
+        }
+
+        .health-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #FF6347, #FF1493);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .health-badge:hover {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+        }
+
+        #cooking-pot {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            transition: all 0.5s ease-out;
+            cursor: pointer;
+        }
+
+        #cooking-pot:hover {
+            transform: translateX(-50%) translateY(-20px);
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            animation: rise 3s infinite ease-in;
+            opacity: 0;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
+
+        .cloud:nth-child(1) {
+            top: 10%;
+        }
+        .cloud:nth-child(2) {
+            top: 30%;
+        }
+
+        footer {
+            background-color: #ECECEC;
+            color: #333;
+            padding: 20px 0;
+            margin-top: 40px;
+            font-family: 'Bubblegum Sans', cursive;
+        }
+
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px; /* Add this line to ensure some space between items */
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        footer a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #FF6347;
+        }
+
+        @media (max-width: 768px) {
+            footer .container {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px; /* Reduce gap for mobile layout */
+            }
+        }
+    </style>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.31/build/spline-viewer.js"></script>
+</head>
+<body>
+    <div class="stars"></div>
+    <header>
+        <div class="cloud" style="width: 100px; height: 50px; left: -100px;"></div>
+        <div class="cloud" style="width: 150px; height: 75px; left: -150px; animation-delay: -5s;"></div>
+        <div class="spline-container">
+            <spline-viewer url="https://prod.spline.design/Qf9XTvBaY69M5WHq/scene.splinecode"></spline-viewer>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Magical Recipes for Growing Superheroes!</h2>
+        <div class="health-info">
+            <h3>Why Our Recipes Are Super-Duper Amazing!</h3>
+            <p>Imagine your body as a magical kingdom. Every bite of our yummy dishes sends tiny superhero nutrients to make your kingdom stronger, happier, and ready for awesome adventures! From friendly probiotics that make your tummy smile to mighty minerals that give you the strength of a dragon, we've packed all the good stuff your growing body craves!</p>
+        </div>
+        <div class="recipe-grid">
+            <div class="recipe-card">
+                <img src="your-country-plate.jpg" alt="Colorful plate with traditional dishes from your country" class="recipe-image">
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Your Country Plate</h3>
+                    <p class="recipe-desc">Discover delicious and healthy recipes from your own country!</p>
+                    <span class="health-badge">Local Flavors</span>
+                    <span class="health-badge">Cultural Nutrition</span>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="ai-generated-plate.jpg" alt="Futuristic plate with AI-generated healthy food combinations" class="recipe-image">
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Generate AI Plate</h3>
+                    <p class="recipe-desc">Let AI create a unique, nutritious meal just for you!</p>
+                    <span class="health-badge">AI Nutrition</span>
+                    <span class="health-badge">Personalized Diet</span>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="scan-with-camera.jpg" alt="Phone scanning a plate of food with augmented reality nutritional info" class="recipe-image">
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Scan with Camera</h3>
+                    <p class="recipe-desc">Use your device's camera to analyze and learn about your food!</p>
+                    <span class="health-badge">Instant Info</span>
+                    <span class="health-badge">Nutritional Analysis</span>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="upload-picture.jpg" alt="Interface for uploading a food picture for analysis" class="recipe-image">
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Upload Picture</h3>
+                    <p class="recipe-desc">Share a photo of your meal to get health insights and tips!</p>
+                    <span class="health-badge">Photo Analysis</span>
+                    <span class="health-badge">Dietary Advice</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <svg id="cooking-pot" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <radialGradient id="steam" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                <stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:0" />
+                <stop offset="100%" style="stop-color:rgb(255,255,255);stop-opacity:0.7" />
+            </radialGradient>
+        </defs>
+        <!-- Pot body -->
+        <path d="M20 100 Q20 150 100 180 Q180 150 180 100 L160 100 Q160 140 100 160 Q40 140 40 100 Z" fill="#5D4037"/>
+        <!-- Pot rim -->
+        <path d="M10 100 L190 100" stroke="#4E342E" stroke-width="10" stroke-linecap="round"/>
+        <!-- Handles -->
+        <path d="M0 110 Q0 90 20 90 L20 110 Q10 110 10 100" fill="#4E342E"/>
+        <path d="M200 110 Q200 90 180 90 L180 110 Q190 110 190 100" fill="#4E342E"/>
+        <!-- Steam -->
+        <circle class="bubble" cx="70" cy="80" r="10" fill="url(#steam)">
+            <animate attributeName="cy" from="80" to="0" dur="3s" repeatCount="indefinite" />
+            <animate attributeName="opacity" from="0" to="0.7" dur="3s" repeatCount="indefinite" />
+        </circle>
+        <circle class="bubble" cx="100" cy="90" r="15" fill="url(#steam)">
+            <animate attributeName="cy" from="90" to="10" dur="4s" repeatCount="indefinite" />
+            <animate attributeName="opacity" from="0" to="0.7" dur="4s" repeatCount="indefinite" />
+        </circle>
+        <circle class="bubble" cx="130" cy="85" r="12" fill="url(#steam)">
+            <animate attributeName="cy" from="85" to="5" dur="3.5s" repeatCount="indefinite" />
+            <animate attributeName="opacity" from="0" to="0.7" dur="3.5s" repeatCount="indefinite" />
+        </circle>
+    </svg>
+
+    <footer>
+        <div class="container">
+            <p>Email: <a href="mailto:ogservice@hotmail.com">ogservice@hotmail.com</a></p>
+            <p>&copy; Cometomorrow Studio</p>
+        </div>
+    </footer>
+
+    <script>
+        // Create twinkling stars
+        const starsContainer = document.querySelector('.stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.style.position = 'absolute';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.width = `${Math.random() * 3 + 1}px`;
+            star.style.height = star.style.width;
+            star.style.backgroundColor = 'white';
+            star.style.borderRadius = '50%';
+            star.style.animation = `twinkle ${Math.random() * 5 + 2}s infinite`;
+            starsContainer.appendChild(star);
+        }
+
+        // Add a fun interactive element to recipe cards
+        document.querySelectorAll('.recipe-card').forEach(card => {
+            card.addEventListener('mouseover', () => {
+                card.style.transform = `scale(1.05) rotate(${Math.random() * 6 - 3}deg)`;
+            });
+            card.addEventListener('mouseout', () => {
+                card.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+
+        // Animate the cooking pot
+        const cookingPot = document.getElementById('cooking-pot');
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            if (scrollPercentage > 70) {
+                cookingPot.style.transform = 'translateX(-50%) translateY(-100px)';
+            } else {
+                cookingPot.style.transform = 'translateX(-50%) translateY(0)';
+            }
+        });
+
+        // Create bubbles in the cooking pot
+        function createBubble() {
+            const bubble = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            bubble.setAttribute("class", "bubble");
+            bubble.setAttribute("cx", 70 + Math.random() * 60);
+            bubble.setAttribute("cy", 120);
+            bubble.setAttribute("r", Math.random() * 8 + 2);
+            bubble.setAttribute("fill", "url(#steam)");
+            cookingPot.appendChild(bubble);
+
+            const animationDuration = Math.random() * 2 + 2;
+            bubble.style.animation = `rise ${animationDuration}s ease-in`;
+
+            setTimeout(() => {
+                cookingPot.removeChild(bubble);
+            }, animationDuration * 1000);
+        }
+
+        setInterval(createBubble, 300);
+    </script>
+</body>
+</html>
